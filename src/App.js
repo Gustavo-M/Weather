@@ -1,7 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 
-import useStyles from "./App.styles"
+import useStyles from "./App.styles";
+
+import WeatherCard from "../src/components/WeatherCard";
 
 import { Button, Grid, TextField } from '@material-ui/core';
 
@@ -9,7 +11,7 @@ const App = () => {
 
     const classes = useStyles();
 
-    const [ form, setForm ] = useState({
+    const [form, setForm] = useState({
         city: "",
     });
     const handleSearchCity = () => {
@@ -31,7 +33,7 @@ const App = () => {
             <Grid container justifyContent="center">
                 <Grid item xs={12} md={3} className={classes.wrap}>
                     <h1 className={classes.title}>Previsão do Tempo</h1>
-                    <p className={classes.subTitle}>Digite o nome da sua cidade para conferir como está o clima.</p>
+                    <p className={classes.subTitle}>Digite o nome da sua cidade para <br/>conferir o clima.</p>
                     <div className={classes.divField}>
                         <TextField
                             variant="outlined"
@@ -49,6 +51,11 @@ const App = () => {
                     >
                         Pesquisar
                     </Button>
+                </Grid>
+            </Grid>
+            <Grid container justifyContent="center">
+                <Grid item xs={12} md={3} className={classes.wrap}>
+                    <WeatherCard />
                 </Grid>
             </Grid>
         </>

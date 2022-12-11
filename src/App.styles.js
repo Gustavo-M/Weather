@@ -14,7 +14,6 @@ const useStyles = makeStyles(() => ({
         paddingBottom: 20,
         fontSize: 14,
         color: "#263030",
-        fontWeight: "bold",
     },
     divField: {
         marginBottom: 20,
