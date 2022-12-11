@@ -14,10 +14,18 @@ const App = () => {
     const [form, setForm] = useState({
         city: "",
     });
+
+    const [weatherData, setWeatherData] = useState(null);
+
     const handleSearchCity = () => {
         axios.get(`http://api.weatherapi.com/v1/current.json?key=chave&q=${form.city}&lang=pt`)
             .then(response => {
-                console.log(response.data);
+                if (response.status === 200) {
+                    setWeatherData(response.data);
+                }
+            })
+            .catch((error) => {
+                console.log('Houve um erro.', error.message || error)
             })
     }
 
@@ -33,14 +41,14 @@ const App = () => {
             <Grid container justifyContent="center">
                 <Grid item xs={12} md={3} className={classes.wrap}>
                     <h1 className={classes.title}>Previsão do Tempo</h1>
-                    <p className={classes.subTitle}>Digite o nome da sua cidade para <br/>conferir o clima.</p>
+                    <p className={classes.subTitle}>Digite o nome da sua cidade para <br />conferir o clima.</p>
                     <div className={classes.divField}>
                         <TextField
                             variant="outlined"
                             size="small"
                             className={classes.field}
                             name="city"
-                            value={form.city}
+                            value={form.city.normalize("NFD").replace(/[^a-zA-Z\s]/g, "")}
                             onChange={handleInputCity}
                         />
                     </div>
@@ -55,7 +63,15 @@ const App = () => {
             </Grid>
             <Grid container justifyContent="center">
                 <Grid item xs={12} md={3} className={classes.wrap}>
-                    <WeatherCard />
+                    {weatherData ?
+                        <WeatherCard
+                            text={weatherData.current.condition.text}
+                            temp={`${weatherData.current.temp_c.toFixed()}C`}
+                            icon={weatherData.current.condition.icon}
+                            wind={`${weatherData.current.wind_mph}km`}
+                        />
+                        : null
+                    }
                 </Grid>
             </Grid>
         </>
