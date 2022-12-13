@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 
 import useStyles from "./App.styles";
+import Erro from "./components/Erro";
 
 import WeatherCard from "../src/components/WeatherCard";
 
@@ -16,8 +17,10 @@ const App = () => {
     });
 
     const [weatherData, setWeatherData] = useState(null);
+    const [erro, setErro] = useState(false);
 
     const handleSearchCity = () => {
+        erro && setErro(false);
         axios.get(`http://api.weatherapi.com/v1/current.json?key=chave&q=${form.city}&lang=pt`)
             .then(response => {
                 if (response.status === 200) {
@@ -25,7 +28,9 @@ const App = () => {
                 }
             })
             .catch((error) => {
-                console.log('Houve um erro.', error.message || error)
+                setErro(true);
+                setWeatherData(null);
+                console.log('Houve um erro.', error.message || error);
             })
     }
 
@@ -72,6 +77,7 @@ const App = () => {
                         />
                         : null
                     }
+                    <Erro message="Cidade não encontrada" isErro={erro} />
                 </Grid>
             </Grid>
         </>
